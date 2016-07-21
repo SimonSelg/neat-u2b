@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd ">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -11,47 +12,16 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>neat-u2b Magnolia Module</name>
-  <!--
-    Please uncomment and fill in, or remove, the following.
-    The license below is not linked to any checkstyle or other check which would validate the source files or the packaging,
-    nor influence the generated README.txt file.
-    If you wanted to enforce a license header in source files, you can set the <checkstyleHeader> property.
-  <description>... please fill in this description ...</description>
-  <inceptionYear>...</inceptionYear>
-  <organization>
-    <name>...</name>
-    <url>...</url>
-  </organization>
-
-  <developers>
-    <developer>
-      <id>...</id>
-      <name>...</name>
-    </developer>
-    ...
-  </developers>
-  <contributors>
-    ... add as needed...
-  </contributors>
-
-  <licenses>
-    <license>
-      <name>...</name>
-      <url>...</url>
-    </license>
-  </licenses>
-  -->
 
   <properties>
     <magnoliaVersion>5.3</magnoliaVersion>
-    <javaVersion>1.6</javaVersion>
+    <javaVersion>1.7</javaVersion>
   </properties>
 
-  <!-- Please double-check these URLs -->
   <scm>
-    <connection>scm:git:http://git.magnolia-cms.com/forge/neat-u2b</connection>
-    <developerConnection>scm:git:https://git.magnolia-cms.com/forge/neat-u2b</developerConnection>
-    <url>http://git.magnolia-cms.com/gitweb/?p=forge/neat-u2b</url>
+    <connection>scm:git:https://github.com/rah003/neat-u2b.git</connection>
+    <developerConnection>scm:git:https://github.com/rah003/neat-u2b.git</developerConnection>
+    <url></url>
     <tag>HEAD</tag>
   </scm>
 
@@ -79,13 +49,70 @@
 
   <build>
     <plugins>
-      <!-- enable this if your module needs assembly (packaged with its scope:compile dependencies)
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>${javaVersion}</source>
+          <target>${javaVersion}</target>
+        </configuration>
       </plugin>
-      -->
+      <!-- java 8 support in checkstyle -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.17</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>6.11.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
     </plugins>
+
+    <!-- default resources configuration which will filter your module descriptors -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>META-INF/magnolia/*</include>
+        </includes>
+      </resource>
+    </resources>
   </build>
+
+  <repositories>
+    <repository>
+      <id>magnolia.public</id>
+      <url>https://nexus.magnolia-cms.com/content/groups/public</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <!-- IF YOU NEED MODULES FROM THE ENTERPRISE VERSION, UNCOMMENT THE FOLLOWING REPOSITORY -->
+    <!--
+    <repository>
+      <id>magnolia.enterprise.releases</id>
+      <url>https://nexus.magnolia-cms.com/content/repositories/magnolia.enterprise.releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    -->
+    <repository>
+      <id>vaadin-addons</id>
+      <url>https://maven.vaadin.com/vaadin-addons</url>
+    </repository>
+  </repositories>
 
 </project>

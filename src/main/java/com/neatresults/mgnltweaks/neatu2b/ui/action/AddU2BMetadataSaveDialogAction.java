@@ -80,7 +80,7 @@ public class AddU2BMetadataSaveDialogAction extends SaveDialogAction<Definition>
 
         // tricky thing. we need to reorder node after validation is checked and before callback is executed ...
         // ... the only place to do so short of reimplementing execute() is here
-        String prefix = node.getName();
+        String prefix = getDefinition().getIdFieldName();
         RestEasyClient client = null;
         U2BService service = null;
         try {
