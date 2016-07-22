@@ -5,18 +5,6 @@
 [#assign hideControls = content.hideControls!false]
 
 [#if link?has_content]
-    [#if link?index_of("//youtu.be/") > -1]
-        [#assign youtubeIDs = link?split("//youtu.be/")];
-        [#assign youtubeID = youtubeIDs[1]]
-    [#elseif link?index_of("//www.youtube.com/watch?v=") > -1]
-        [#assign youtubeIDs = link?split("//www.youtube.com/watch?v=")]
-        [#assign youtubeID = youtubeIDs[1]]
-    [#else]
-        [#assign youtubeID = link]
-    [/#if]
-
-    [#assign videoURL = "//www.youtube.com/embed/" + youtubeID]
-
     [#assign urlParams = ""]
     [#macro addToUrlParams add]
         [#if urlParams != ""]
@@ -26,6 +14,28 @@
         [/#if]
         [#assign urlParams = urlParams + add]
     [/#macro]
+
+    [#assign youtubeID = link]
+
+    [#if link?index_of("//youtu.be/") > -1]
+        [#assign youtubeIDs = link?split("//youtu.be/")];
+        [#assign youtubeID = youtubeIDs[1]]
+    [#elseif link?index_of("//www.youtube.com/watch?v=") > -1]
+        [#assign youtubeIDs = link?split("//www.youtube.com/watch?v=")]
+        [#assign youtubeID = youtubeIDs[1]]
+    [/#if]
+
+    [#if youtubeID?index_of("&") > -1]
+        [#list youtubeID?split("&") as x]
+            [#if x_index == 0]
+                [#assign youtubeID = x]
+            [#else]
+                [@addToUrlParams x /]
+            [/#if]
+        [/#list]
+    [/#if]
+
+    [#assign videoURL = "//www.youtube.com/embed/" + youtubeID]
 
     [#if autoPlay]
         [@addToUrlParams "autoplay=1"/]
@@ -39,7 +49,6 @@
     [#if startTime?has_content]
         [@addToUrlParams ("t=" + content.startTime)/]
     [/#if]
-
 
     <div class="embed-responsive embed-responsive-16by9" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 
