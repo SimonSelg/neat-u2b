@@ -32,6 +32,12 @@
       <version>${magnoliaVersion}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>info.magnolia.ui</groupId>
+      <artifactId>magnolia-ui-form</artifactId>
+      <version>${magnoliaVersion}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>info.magnolia.restclient</groupId>
