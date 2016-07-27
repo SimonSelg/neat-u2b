@@ -69,7 +69,7 @@ Maven dependency
     <dependency>
       <groupId>com.neatresults.mgnltweaks</groupId>
       <artifactId>neat-u2b</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>
 ```
 
@@ -77,7 +77,7 @@ Versions
 -----------------
 Version 1.0 should be compatible with all Magnolia 5.3 or higher versions, but was tested only on 5.3.15 and not before or after. If you run into any issues w/ other versions, please report them back.
 
-Latest version can be found at https://nexus.magnolia-cms.com/service/local/repositories/magnolia.forge.releases/content/com/neatresults/mgnltweaks/neat-jsonfn/1.0/neat-jsonfn-1.0.jar
+Latest version can be found at https://nexus.magnolia-cms.com/service/local/repositories/magnolia.forge.releases/content/com/neatresults/mgnltweaks/neat-u2b/1.0/neat-u2b-1.0.jar
 
 Installation & updates 
 -----------------
