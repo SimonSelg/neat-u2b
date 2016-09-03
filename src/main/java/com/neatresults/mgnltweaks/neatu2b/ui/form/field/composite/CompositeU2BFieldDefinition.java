@@ -23,7 +23,7 @@
  * use neat-u2b commercially, please contact owner at the address above.
  *
  */
-package com.neatresults.mgnltweaks.neatu2b.ui.form.field.transformer;
+package com.neatresults.mgnltweaks.neatu2b.ui.form.field.composite;
 
 import info.magnolia.ui.form.field.definition.CompositeFieldDefinition;
 import info.magnolia.ui.form.field.definition.ConfiguredFieldDefinition;
@@ -35,14 +35,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Definition for youtube field.
+ * Definition for youtube field using composite & multi fields. Results in ugly layout. Goes together with info.magnolia.ui.form.field.factory.CompositeFieldFactory in field type definition.
+ *
+ * Quick and dirty ... just an example, not to be used in production! Use U2BField instead.
  */
-public class U2BFieldDefinition extends CompositeFieldDefinition {
+public class CompositeU2BFieldDefinition extends CompositeFieldDefinition {
 
     private LinkedList<ConfiguredFieldDefinition> fields = new LinkedList<>();
 
-    public U2BFieldDefinition() {
-        setTransformerClass(U2BFieldTransformer.class);
+    public CompositeU2BFieldDefinition() {
+        setTransformerClass(CompositeU2BFieldTransformer.class);
         setLayout(Layout.vertical);
     }
 
@@ -55,6 +57,7 @@ public class U2BFieldDefinition extends CompositeFieldDefinition {
     @Override
     public List<ConfiguredFieldDefinition> getFields() {
         if (fields.isEmpty()) {
+            // set fields directly at the item level
             TextFieldDefinition mainField = new TextFieldDefinition();
             mainField.setName("Id");
             mainField.setLabel("Video URL or Id");
@@ -76,27 +79,26 @@ public class U2BFieldDefinition extends CompositeFieldDefinition {
             definition.setName("Definition");
             definition.setLabel("Definition");
             fields.add(definition);
-
+            // set fields going into subnode (multifield - thumbs, we don't know how many are there)
             MultiValueFieldDefinition thumbs = new MultiValueFieldDefinition();
             thumbs.setName("Thumbs");
-            thumbs.setLabel("Thumbs");
-            thumbs.setButtonSelectAddLabel("Add");
-            // thumbs.setReadOnly(true);
+            thumbs.setLabel("Thumbnails");
+            thumbs.setButtonSelectAddLabel("");
             CompositeFieldDefinition thumb = new CompositeFieldDefinition();
             thumb.setLayout(Layout.vertical);
             thumb.setName("thumb");
             thumb.setLabel("Thumbnail");
             TextFieldDefinition width = new TextFieldDefinition();
             width.setName("width");
-            width.setLabel("Width");
+            width.setLabel(" Width");
             thumb.addField(width);
             TextFieldDefinition height = new TextFieldDefinition();
             height.setName("height");
-            height.setLabel("Height");
+            height.setLabel(" Height");
             thumb.addField(height);
             TextFieldDefinition url = new TextFieldDefinition();
             url.setName("url");
-            url.setLabel("URL");
+            url.setLabel(" URL");
             thumb.addField(url);
             thumbs.setField(thumb);
             fields.add(thumbs);

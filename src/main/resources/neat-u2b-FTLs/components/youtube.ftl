@@ -1,4 +1,4 @@
-[#assign link = content.youtube!]
+[#assign link = content.youtube.id!]
 [#assign autoPlay = content.autoPlay!false]
 [#assign startTime = content.startTime!]
 [#assign hideInfo = content.hideInfo!false]
@@ -52,11 +52,11 @@
 
     <div class="embed-responsive embed-responsive-16by9" itemprop="video" itemscope itemtype="http://schema.org/VideoObject">
 
-        <meta itemprop="name" content="${content.youtubeTitle!}" />
-        <meta itemprop="description" content="${content.youtubeDescription!}" />
-        <meta itemprop="duration" content="${content.youtubeDuration!}" />
-        <meta itemprop="uploadDate" content="${content.youtubePublishedAt!}" />
-        <meta itemprop="thumbnailUrl" content="${content.youtubeThumbs.medium.url!}" />
+        <meta itemprop="name" content="${content.youtube.title!}" />
+        <meta itemprop="description" content="${content.youtube.description!}" />
+        <meta itemprop="duration" content="${content.youtube.duration!}" />
+        <meta itemprop="uploadDate" content="${content.youtube.publishedAt!}" />
+        <meta itemprop="thumbnailUrl" content="${content.youtube.mediumUrl!}" />
         <meta itemprop="embedURL" content="${videoURL}" />
 
         <iframe src='${videoURL + urlParams}' width="560" height="315" frameborder="0" allowfullscreen></iframe>

@@ -171,7 +171,7 @@
               <sv:value>23d41b9c-92c2-473f-b13b-1a1baec3deed</sv:value>
             </sv:property>
             <sv:property sv:name="class" sv:type="String">
-              <sv:value>info.magnolia.ui.form.field.definition.TextFieldDefinition</sv:value>
+              <sv:value>com.neatresults.mgnltweaks.neatu2b.ui.form.field.transformer.U2BField$Definition</sv:value>
             </sv:property>
             <sv:property sv:name="description" sv:type="String">
               <sv:value>Link to a video</sv:value>
@@ -420,13 +420,13 @@
         <sv:value>c3d3071c-a763-453a-8e6c-a35543c3af5b</sv:value>
       </sv:property>
       <sv:property sv:name="class" sv:type="String">
-        <sv:value>com.neatresults.mgnltweaks.neatu2b.ui.action.AddU2BMetadataSaveDialogAction$Definition</sv:value>
+        <sv:value>info.magnolia.ui.admincentral.dialog.action.SaveDialogActionDefinition</sv:value>
       </sv:property>
       <sv:property sv:name="jcr:createdBy" sv:type="String">
         <sv:value>system</sv:value>
       </sv:property>
       <sv:property sv:name="label" sv:type="String">
-        <sv:value>save &amp; import youtube data</sv:value>
+        <sv:value>save</sv:value>
       </sv:property>
       <sv:property sv:name="mgnl:lastModified" sv:type="Date">
         <sv:value>2016-07-21T14:00:40.767+02:00</sv:value>

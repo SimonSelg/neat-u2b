@@ -23,7 +23,7 @@
  * use neat-u2b commercially, please contact owner at the address above.
  *
  */
-package com.neatresults.mgnltweaks.neatu2b.ui.form.field.transformer;
+package com.neatresults.mgnltweaks.neatu2b.ui.form.field.composite;
 
 import info.magnolia.jcr.iterator.FilteringPropertyIterator;
 import info.magnolia.jcr.predicate.JCRMgnlPropertyHidingPredicate;
@@ -58,25 +58,28 @@ import com.neatresults.mgnltweaks.neatu2b.NeatU2b;
 import com.neatresults.mgnltweaks.neatu2b.restclient.U2BService;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
-import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.PropertysetItem;
 
 /**
  * Expands single field with youtube video id/link to set of fields containing also metadata about the video.
+ *
+ * Quick and dirty ... just an example, not to be used in production! Use U2BField instead.
  */
-public class U2BFieldTransformer extends CompositeTransformer {
+public class CompositeU2BFieldTransformer extends CompositeTransformer {
 
-    private static final Logger log = LoggerFactory.getLogger(U2BFieldTransformer.class);
+    private static final Logger log = LoggerFactory.getLogger(CompositeU2BFieldTransformer.class);
     protected List<String> fieldsName;
     private final RestClientRegistry restClientRegistry;
 
     private final NeatU2b u2bModule;
+    private CompositeU2BFieldDefinition u2bDefinition;
 
     @Inject
-    public U2BFieldTransformer(Item relatedFormItem, U2BFieldDefinition definition, Class<PropertysetItem> type, List<String> fieldsName) {
+    public CompositeU2BFieldTransformer(Item relatedFormItem, CompositeU2BFieldDefinition definition, Class<PropertysetItem> type, List<String> fieldsName) {
         super(relatedFormItem, definition, type, fieldsName);
         this.restClientRegistry = Components.getComponent(RestClientRegistry.class);
         this.u2bModule = Components.getComponent(ModuleRegistry.class).getModuleInstance(NeatU2b.class);
+        this.u2bDefinition = definition;
     }
 
     @Override
@@ -89,9 +92,9 @@ public class U2BFieldTransformer extends CompositeTransformer {
 
     @Override
     public void writeToItem(PropertysetItem newValues) {
-        // TODO: get property with ID (live debug to get the name)
         Property prop = relatedFormItem.getItemProperty(this.propertyPrefix);
 
+        // initialize rest service
         RestEasyClient client = null;
         U2BService service = null;
         try {
@@ -101,10 +104,10 @@ public class U2BFieldTransformer extends CompositeTransformer {
             log.error("Failed to get a client for [" + U2BService.class.getName() + "] with: " + e.getMessage(), e);
         }
         if (service != null) {
-            // call get videoId() with that prop
-            // do the rest
+            // extract video id from the string that might be url or id
             String id = getVideoId(prop);
             String key = u2bModule.getGoogleKey();
+            // call service w/ id to get the metadata
             JsonNode response = service.meta(id, "snippet", key);
             try {
                 if (response.get("items").getElements().hasNext()) {
@@ -126,13 +129,14 @@ public class U2BFieldTransformer extends CompositeTransformer {
                         JcrNodeAdapter thumbChild = getOrCreateChildItem(thumbsParent, entry.getKey());
                         String propId = "url";
                         thumbChild.removeItemProperty(propId);
-                        thumbChild.addItemProperty(propId, new ObjectProperty(entry.getValue().get(propId).getTextValue()));
+                        thumbChild.addItemProperty(propId, new DefaultProperty<String>(String.class, entry.getValue().get(propId).getTextValue()));
+                        // need to get those as longs not as text!!
                         propId = "width";
                         thumbChild.removeItemProperty(propId);
-                        thumbChild.addItemProperty(propId, new ObjectProperty(entry.getValue().get(propId).getLongValue()));
+                        thumbChild.addItemProperty(propId, new DefaultProperty<Long>(Long.class, entry.getValue().get(propId).getLongValue()));
                         propId = "height";
                         thumbChild.removeItemProperty(propId);
-                        thumbChild.addItemProperty(propId, new ObjectProperty(entry.getValue().get(propId).getLongValue()));
+                        thumbChild.addItemProperty(propId, new DefaultProperty<Long>(Long.class, entry.getValue().get(propId).getLongValue()));
                         thumbsParent.addChild(thumbChild);
                     }
 
@@ -160,10 +164,10 @@ public class U2BFieldTransformer extends CompositeTransformer {
     private void setNewValue(Item relatedFormItem, JsonNode snippet, String fieldName) {
         String value = snippet.get(fieldName).getTextValue();
         String compositePropertyName = getCompositePropertyName(StringUtils.capitalize(fieldName));
-        relatedFormItem.addItemProperty(compositePropertyName, new ObjectProperty(value));
+        relatedFormItem.addItemProperty(compositePropertyName, new DefaultProperty<String>(String.class, value));
     }
 
-    public String getVideoId(Property prop) {
+    public String getVideoId(Property<?> prop) {
         if (prop == null) {
             throw new NullPointerException("Video is not set or name of the required field for this dialog is not correctly configured.");
         }
@@ -201,7 +205,11 @@ public class U2BFieldTransformer extends CompositeTransformer {
 
     @Override
     public PropertysetItem readFromItem() {
+        // read all the normal/basic fields from the parent
         PropertysetItem supsi = super.readFromItem();
+        // fake the ID as we are forcing that to be stored just as the prefix
+        supsi.addItemProperty("Id", supsi.getItemProperty(propertyPrefix));
+        // manually load props from subnodes (just like simplified version of MultivalueSubnodeTransformer)
         try {
             String thumbsName = getCompositePropertyName("Thumbs");
             JcrNodeAdapter thumbsParent = getOrCreateChildItem((JcrNodeAdapter) relatedFormItem, thumbsName);
@@ -224,6 +232,9 @@ public class U2BFieldTransformer extends CompositeTransformer {
         } catch (RepositoryException e) {
             log.error(e.getMessage(), e);
         }
+        /*
+         * for (ConfiguredFieldDefinition field : u2bDefinition.getFields()) { if (field.getName() == null || !field.getName().equals("Id")) { field.setReadOnly(true); } }
+         */
         return supsi;
     }
 

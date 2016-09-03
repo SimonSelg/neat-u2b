@@ -58,6 +58,8 @@ import com.vaadin.data.Property;
 
 /**
  * SaveDialogAction that will position saved node as first sibling instead of default (last).
+ *
+ * Quick and dirty ... just an example, not to be used in production! Use U2BField instead.
  */
 public class AddU2BMetadataSaveDialogAction extends SaveDialogAction<Definition> {
 
