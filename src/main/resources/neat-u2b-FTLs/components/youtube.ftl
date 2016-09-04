@@ -55,7 +55,7 @@
         <meta itemprop="name" content="${content.youtube.title!}" />
         <meta itemprop="description" content="${content.youtube.description!}" />
         <meta itemprop="duration" content="${content.youtube.duration!}" />
-        <meta itemprop="uploadDate" content="${content.youtube.publishedAt!}" />
+        <meta itemprop="uploadDate" content="${content.youtube.published!}" />
         <meta itemprop="thumbnailUrl" content="${content.youtube.mediumUrl!}" />
         <meta itemprop="embedURL" content="${videoURL}" />
 

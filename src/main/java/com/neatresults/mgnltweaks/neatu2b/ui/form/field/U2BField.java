@@ -41,6 +41,7 @@ import info.magnolia.objectfactory.ComponentProvider;
 import info.magnolia.registry.RegistrationException;
 import info.magnolia.rest.client.registry.RestClientRegistry;
 import info.magnolia.resteasy.client.RestEasyClient;
+import info.magnolia.ui.form.config.TextFieldBuilder;
 import info.magnolia.ui.form.field.CompositeField;
 import info.magnolia.ui.form.field.definition.CompositeFieldDefinition;
 import info.magnolia.ui.form.field.definition.ConfiguredFieldDefinition;
@@ -112,10 +113,7 @@ public class U2BField extends CompositeField {
         final TextField title = createTextField("Title", newValue);
         root.addComponent(title);
 
-        final TextFieldDefinition def = new TextFieldDefinition();
-        def.setRows(3);
-        def.setName("description");
-        def.setLabel("Description");
+        final TextFieldDefinition def = new TextFieldBuilder("description").label("Description").rows(3).definition();
         final TextArea description = (TextArea) createLocalField(def, newValue.getItemProperty(def.getName()), false);
         newValue.addItemProperty(def.getName(), description.getPropertyDataSource());
         description.setNullRepresentation("");
@@ -234,9 +232,7 @@ public class U2BField extends CompositeField {
 
     private TextField createTextField(String label, PropertysetItem newValue, String id) {
         // TODO: i18n-ize
-        final TextFieldDefinition def = new TextFieldDefinition();
-        def.setName(id);
-        def.setLabel(label);
+        final TextFieldDefinition def = new TextFieldBuilder(id).label(label).definition();
         final TextField field = (TextField) createLocalField(def, newValue.getItemProperty(id), false);
         newValue.addItemProperty(id, field.getPropertyDataSource());
 
