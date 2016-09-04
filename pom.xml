@@ -9,7 +9,7 @@
 
   <groupId>com.neatresults.mgnltweaks</groupId>
   <artifactId>neat-u2b</artifactId>
-  <version>2.0</version>
+  <version>2.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>neat-u2b Magnolia Module</name>
 
@@ -21,8 +21,8 @@
   <scm>
     <connection>scm:git:https://github.com/rah003/neat-u2b.git</connection>
     <developerConnection>scm:git:https://github.com/rah003/neat-u2b.git</developerConnection>
-    <url />
-    <tag>neat-u2b-2.0</tag>
+    <url></url>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
